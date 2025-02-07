@@ -1,0 +1,206 @@
+[
+    {
+      "item_id": "B0746KJVP2",
+      "main_image_id": "81Cam9nlaBL",
+      "product_type": [
+        {
+          "value": "CHAIR"
+        }
+      ],
+      "3dmodel_id": "B0746KJVP2.glb",
+      "item_name": [
+        {
+          "language_tag": "en_US",
+          "value": "Amazon Brand \u2013 Rivet Charlotte Mid-Century Modern Upholstered Gold Accent Chair, 29\"W, Natural"
+        }
+      ],
+      "image_path": "9b427ea0.jpg"
+    },
+    {
+      "item_id": "B075X543WR",
+      "main_image_id": "A1qXzEnvbDL",
+      "product_type": [
+        {
+          "value": "CHAIR"
+        }
+      ],
+      "3dmodel_id": "B075X543WR.glb",
+      "item_name": [
+        {
+          "language_tag": "en_US",
+          "value": "Amazon Brand \u2013 Stone & Beam Cameron Classic Oversized Arm Chair, 32\"W, Indigo"
+        }
+      ],
+      "image_path": "5d8a547b.jpg"
+    },
+    {
+      "item_id": "B07B7B244W",
+      "main_image_id": "71DNWOd-5bL",
+      "product_type": [
+        {
+          "value": "CHAIR"
+        }
+      ],
+      "3dmodel_id": "B07B7B244W.glb",
+      "item_name": [
+        {
+          "language_tag": "en_US",
+          "value": "Amazon Brand \u2013 Rivet Allie Leather Industrial Mid-Century Dining Room Kitchen Chair, 33\"H, Brown and Black"
+        }
+      ],
+      "image_path": "86bb70ad.jpg"
+    },
+    {
+      "item_id": "B0853VY3JP",
+      "main_image_id": "91XcUlq2HiL",
+      "product_type": [
+        {
+          "value": "CHAIR"
+        }
+      ],
+      "3dmodel_id": "B0853VY3JP.glb",
+      "item_name": [
+        {
+          "language_tag": "en_US",
+          "value": "Amazon Brand \u2013 Stone & Beam Elisabet Upholstered Swivel Chair, 33.5\"W, Hemp"
+        }
+      ],
+      "image_path": "05711261.jpg"
+    },
+    {
+      "item_id": "lampRoundFloor",
+      "main_image_id": "lampRoundFloor",
+      "product_type": [
+        {
+          "value": "LAMP"
+        }
+      ],
+      "3dmodel_id": "lampRoundFloor.glb",
+      "item_name": [
+        {
+          "language_tag": "en_US",
+          "value": "Lamp Round Floor"
+        }
+      ],
+      "image_path": "lampRoundFloor.png"
+    },
+    {
+        "item_id": "lampRoundTable",
+        "main_image_id": "lampRoundTable",
+        "product_type": [
+            {
+            "value": "LAMP"
+            }
+        ],
+        "3dmodel_id": "lampRoundTable.glb",
+        "item_name": [
+            {
+            "language_tag": "en_US",
+            "value": "Lamp Round Table"
+            }
+        ],
+        "image_path": "lampRoundTable.png"
+    },
+    {
+        "item_id": "bedDouble",
+        "main_image_id": "bedDouble",
+        "product_type": [
+            {
+            "value": "BED"
+            }
+        ],
+        "3dmodel_id": "bedDouble-2.glb",
+        "item_name": [
+            {
+            "language_tag": "en_US",
+            "value": "Double Bed"
+            }
+        ],
+        "image_path": "bedDouble.png"
+    },
+    {
+        "item_id": "bookcaseClosedDoors",
+        "main_image_id": "bookcaseClosedDoors",
+        "product_type": [
+            {
+            "value": "Cabinet"
+            }
+        ],
+        "3dmodel_id": "bookcaseClosedDoors.glb",
+        "item_name": [
+            {
+            "language_tag": "en_US",
+            "value": "Book Case Closed Doors"
+            }
+        ],
+        "image_path": "bookcaseClosedDoors.png"
+    },
+    {
+        "item_id": "cabinetBed",
+        "main_image_id": "cabinetBed",
+        "product_type": [
+            {
+            "value": "Cabinet"
+            }
+        ],
+        "3dmodel_id": "cabinetBed.glb",
+        "item_name": [
+            {
+            "language_tag": "en_US",
+            "value": "Bed Cabinet"
+            }
+        ],
+        "image_path": "cabinetBed.png"
+    },
+    {
+        "item_id": "coatRackStanding",
+        "main_image_id": "coatRackStanding",
+        "product_type": [
+            {
+            "value": "Rack"
+            }
+        ],
+        "3dmodel_id": "coatRackStanding.glb",
+        "item_name": [
+            {
+            "language_tag": "en_US",
+            "value": "Coat Rack Standing"
+            }
+        ],
+        "image_path": "coatRackStanding.png"
+    },
+    {
+        "item_id": "desk",
+        "main_image_id": "desk",
+        "product_type": [
+            {
+            "value": "desk"
+            }
+        ],
+        "3dmodel_id": "desk.glb",
+        "item_name": [
+            {
+            "language_tag": "en_US",
+            "value": "desk"
+            }
+        ],
+        "image_path": "desk.png"
+    },
+    {
+        "item_id": "televisionModern",
+        "main_image_id": "televisionModern",
+        "product_type": [
+            {
+            "value": "TV"
+            }
+        ],
+        "3dmodel_id": "televisionModern.glb",
+        "item_name": [
+            {
+            "language_tag": "en_US",
+            "value": "TV"
+            }
+        ],
+        "image_path": "televisionModern.png"
+    }
+  ]

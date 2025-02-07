@@ -1,0 +1,32 @@
+{
+    "version": "ff446a93ef9e6a34a00cc2d6255bcada96a71726ae6b55fa5d7d61eaa0f4860c",
+    "input":
+    {
+        "width": 768,
+        "height": 768,
+        "prompt": "[\"A living room decorated with furniture from mid-century modern style, (photorealistic:1.4), DSLR photo, high detail, high-resolution photograph, vibrant colors, realistic furniture, Architectural Digest\"]",
+        "refine": "no_refiner",
+        "scheduler": "K_EULER",
+        "lora_scale": 0.6,
+        "num_outputs": 4,
+        "controlnet_1": "depth_midas",
+        "controlnet_2": "none",
+        "controlnet_3": "none",
+        "guidance_scale": 7.5,
+        "apply_watermark": false,
+        "negative_prompt": "human, person, people, watermark, text, render, artwork, anime, cartoon, graphic, text, painting, crayon, graphite, abstract, glitch, deformed, mutated, ugly, disfigured, distorted furniture",
+        "prompt_strength": 0.8,
+        "sizing_strategy": "controlnet_1_image",
+        "controlnet_1_end": 1,
+        "controlnet_2_end": 1,
+        "controlnet_3_end": 1,
+        "controlnet_1_image": "https://assets.wayfairnext.com/muse/site_imagery/abstract_geo.png",
+        "controlnet_1_start": 0,
+        "controlnet_2_start": 0,
+        "controlnet_3_start": 0,
+        "num_inference_steps": 30,
+        "controlnet_1_conditioning_scale": 0.75,
+        "controlnet_2_conditioning_scale": 0.75,
+        "controlnet_3_conditioning_scale": 0.75
+    }
+}

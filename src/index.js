@@ -66,8 +66,6 @@ globals.renderer.xr.addEventListener('sessionstart', () => {
 	const session = globals.renderer.xr.getSession();
 	console.log(session);
 	session.updateTargetFrameRate(72);
-
-	globals.offScreenRenderTarget = new WebGLRenderTarget(980, 980);
 });
 
 const url =

@@ -7,10 +7,11 @@
 
 import { Container, Image, Root, Text } from '@pmndrs/uikit';
 import { Group, Raycaster } from 'three';
+import { takeScreenshot, triggerGenAIFlow } from './snapshot';
 
 import { System } from 'elics';
 import { XR_BUTTONS } from 'gamepad-wrapper';
-import chairs from './search.json';
+import chairs from './furniture_search.json';
 import { globals } from './global';
 
 const ITEM_PER_ROW = 4;
@@ -39,10 +40,35 @@ export class UIPanelSystem extends System {
 		});
 		scene.add(this._panelAnchor);
 		this._panelAnchor.add(this._root);
+		globals.panelAnchor = this._panelAnchor;
 
 		this._selectionCoords = [0, 0];
 		this._itemGrid = [];
 		this._prevDirection = DIRECTIONS.None;
+
+		const instructionRowContainer = new Container({
+			flexDirection: 'column',
+			justifyContent: 'space-evenly',
+			alignItems: 'flex-start',
+			gap: 0.5,
+		})
+			.add(
+				new Text("X Button: Take Snapshot", {
+					fontSize: 0.7,
+					fontWeight: 'extra-bold',
+					color: 'black',
+					textAlign: 'center',
+				}),
+			)
+			.add(
+				new Text("Y Button: Trigger GenAI flow", {
+					fontSize: 0.7,
+					fontWeight: 'extra-bold',
+					color: 'black',
+					textAlign: 'center',
+				}),
+			);
+		this._root.add(instructionRowContainer);
 
 		let rowContainer = null;
 		let gridRow = null;
@@ -84,7 +110,7 @@ export class UIPanelSystem extends System {
 				.add(itemImage)
 				.add(
 					new Text(chair.item_id, {
-						fontSize: 0.7,
+						fontSize: 0.53,
 						fontWeight: 'extra-bold',
 						color: 'black',
 						textAlign: 'center',
@@ -176,7 +202,11 @@ export class UIPanelSystem extends System {
 			}
 
 			if (gamepad.getButtonDown(XR_BUTTONS.BUTTON_1)) {
-				globals.snapshot = true;
+				takeScreenshot();
+			}
+
+			if (gamepad.getButtonDown(XR_BUTTONS.BUTTON_2)) {
+				triggerGenAIFlow();
 			}
 		}
 		this._root.update(delta * 1000);

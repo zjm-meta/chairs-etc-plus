@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { Group, Matrix4, Mesh, MeshBasicMaterial, PlaneGeometry, RepeatWrapping, TextureLoader, Vector3 } from 'three';
+import { Group, Matrix4, Vector3 } from 'three';
 
 import { GamepadWrapper } from 'gamepad-wrapper';
 import { System } from 'elics';
@@ -64,66 +64,6 @@ export class PlayerSystem extends System {
 				globals.playerHead.quaternion,
 				this._vec3,
 			);
-
-			if (globals.snapshot) {
-				takeScreenshot();
-				globals.snapshot = false;
-			}
 		}
 	}
 }
-
-
-function takeScreenshot() {
-	const { camera, offScreenRenderTarget, ratk, renderer, scene } = globals;
-	// Add color to planes
-	ratk.planes.forEach((plane) => {
-		// scene.add(plane.planeMesh);
-		// Process each plane
-		plane.visible = true;
-		console.log('Iterating planes with orientation ' + plane.orientation + ' label ' + plane.semanticLabel);
-		const textureLoader = new TextureLoader();
-		
-		if (plane.orientation === 'vertical') {
-			textureLoader.load('assets/textures/white_plaster_02_diff_4k.jpg', (newTexture) => {
-				newTexture.wrapS = RepeatWrapping;
-				newTexture.wrapT = RepeatWrapping;
-				newTexture.repeat.set(1, 1); // Adjust these values as needed
-				// Update the material's map with the new texture
-				plane.planeMesh.material.map = newTexture;
-				plane.planeMesh.material.color.setHex( 0xffffff );
-				plane.planeMesh.material.needsUpdate = true; // Ensure the material is updated
-			});
-		} else if (plane.semanticLabel === 'floor')  {
-			textureLoader.load('assets/textures/wood_floor_texture.jpg', (newTexture) => {
-				newTexture.wrapS = RepeatWrapping;
-				newTexture.wrapT = RepeatWrapping;
-				newTexture.repeat.set(1, 1); // Adjust these values as needed
-				// Update the material's map with the new texture
-				plane.planeMesh.material.map = newTexture;
-				plane.planeMesh.material.needsUpdate = true; // Ensure the material is updated
-			});
-		} 
-		// else {
-		// 	plane.planeMesh.material.color.setHex( 0x101a00 );
-		// }
-
-		// console.log(plane);
-	});
-
-	renderer.setRenderTarget(offScreenRenderTarget);
-	renderer.render(scene, camera);
-	renderer.setRenderTarget(null); // Reset to default render target
-
-	const material = new MeshBasicMaterial({ map: offScreenRenderTarget.texture });
-	const geometry = new PlaneGeometry(1, 1); // adjust size as needed
-	const plane = new Mesh(geometry, material);
-	// Add the plane to the scene
-	scene.add(plane);
-	// Position the plane in front of the camera
-	plane.position.set(1, 1, -2);
-
-	ratk.planes.forEach((plane) => {
-		plane.visible = false;
-	});
-  }

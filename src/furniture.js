@@ -6,16 +6,20 @@
  */
 import { AXES, XR_BUTTONS } from 'gamepad-wrapper';
 import {
+	Box3,
 	DoubleSide,
 	Group,
 	LoadingManager,
 	Mesh,
 	MeshBasicMaterial,
+	MeshMatcapMaterial,
 	PlaneGeometry,
 	Raycaster,
+	RepeatWrapping,
 	ShadowMaterial,
 	SphereGeometry,
-	Vector3,
+	TextureLoader,
+	Vector3
 } from 'three';
 
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
@@ -24,6 +28,27 @@ import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js';
 import { System } from 'elics';
 import { createFurnitureMarker } from './marker';
 import { globals } from './global';
+
+const textureLoader = new TextureLoader();
+
+const wallTexture = textureLoader.load('assets/textures/white_plaster_02_diff_4k.jpg');
+wallTexture.wrapS = RepeatWrapping;
+wallTexture.wrapT = RepeatWrapping;
+wallTexture.repeat.set(1, 1); // Adjust these values as needed
+const wallMaterial = new MeshMatcapMaterial({
+	map: wallTexture,
+	side: DoubleSide,
+	color: 0xffffff,
+});
+
+const floorTexture = textureLoader.load('assets/textures/rosewood_veneer1_diff_4k.jpg');
+floorTexture.wrapS = RepeatWrapping;
+floorTexture.wrapT = RepeatWrapping;
+floorTexture.repeat.set(1, 1); // Adjust these values as needed
+const floorMaterial = new MeshMatcapMaterial({
+	map: floorTexture,
+	side: DoubleSide,
+});
 
 export class FurnitureSystem extends System {
 	init() {
@@ -66,7 +91,7 @@ export class FurnitureSystem extends System {
 			let colliderDesc = RAPIER.ColliderDesc.cuboid(0.5, 0.5, 0.5).setFriction(
 				0,
 			);
-			world.createCollider(colliderDesc, rigidBody);
+			this.rigidBodyCollider = world.createCollider(colliderDesc, rigidBody);
 
 			this.rapierWorld = world;
 			this.rigidBody = rigidBody;
@@ -86,6 +111,7 @@ export class FurnitureSystem extends System {
 			this.cube = new Group();
 			const furnitureMarker = createFurnitureMarker();
 			furnitureMarker.position.set(0, -0.5, 0);
+			this.cube.userData.furnitureMarker = furnitureMarker;
 			this.cube.add(furnitureMarker);
 			scene.add(this.cube);
 
@@ -109,15 +135,15 @@ export class FurnitureSystem extends System {
 				}),
 			);
 			scene.add(this.targetMarker);
+			globals.targetMarker = this.cube;
 
 			/**
 			 *
 			 * @param {import('ratk').Plane} plane
 			 */
 			ratk.onPlaneAdded = (plane) => {
-				plane.planeMesh.material.side = DoubleSide;
-
 				plane.visible = false;
+
 				if (plane.orientation === 'vertical') {
 					const wallColliderDesc = this.RAPIER.ColliderDesc.cuboid(
 						plane.boundingRectangleWidth,
@@ -127,6 +153,8 @@ export class FurnitureSystem extends System {
 						.setTranslation(...plane.position.toArray())
 						.setRotation(plane.quaternion);
 					this.rapierWorld.createCollider(wallColliderDesc);
+
+					plane.planeMesh.material = wallMaterial;
 				} else if (plane.semanticLabel === 'floor') {
 					this.raycaster.set(new Vector3(0, 2, 0), new Vector3(0, -1, 0));
 					const intersect = this.raycaster.intersectObject(plane.planeMesh)[0]
@@ -144,6 +172,8 @@ export class FurnitureSystem extends System {
 						this.rapierWorld.createCollider(updatedColliderDesc);
 					this.floor.position.y = intersect.y;
 					this.rigidBody.setTranslation({ x: 0, y: intersect.y + 3, z: 0 });
+
+					plane.planeMesh.material = floorMaterial;
 				}
 			};
 		}
@@ -153,10 +183,27 @@ export class FurnitureSystem extends System {
 				this._furnitureLoading = true;
 				this._gltfLoader.load('assets/' + globals.furnitureToSpawn, (gltf) => {
 					const model = gltf.scene.children[0];
-					model.position.y -= 0.5;
+					
 					this.cube.add(model);
 					this.cube.userData.furnitureModel = model;
 					this._furnitureLoading = false;
+					// Get the model's bounding box
+					const box = new Box3().setFromObject(model);
+					// Get the dimensions of the model
+					const dimensions = {
+						width: box.max.x - box.min.x,
+						height: box.max.y - box.min.y,
+						depth: box.max.z - box.min.z,
+					};
+
+					model.position.y -= dimensions.height;
+					this.cube.userData.furnitureMarker.position.y = -dimensions.height;
+
+					let updatedColliderDesc = this.RAPIER.ColliderDesc.cuboid(dimensions.width, 
+						dimensions.height, dimensions.depth)
+						.setFriction(0,);
+					this.rapierWorld.removeCollider(this.rigidBodyCollider, true);
+					this.rigidBodyCollider = this.rapierWorld.createCollider(updatedColliderDesc, this.rigidBody);
 				});
 			}
 			globals.furnitureToSpawn = null;
@@ -242,6 +289,15 @@ export class FurnitureSystem extends System {
 			return;
 		}
 
+		// Get the model's bounding box
+		const box = new Box3().setFromObject(furnitureModel);
+		// Get the dimensions of the model
+		const dimensions = {
+			width: box.max.x - box.min.x,
+			height: box.max.y - box.min.y,
+			depth: box.max.z - box.min.z,
+		};
+
 		// Create a new fixed rigid body for the furniture at its current position
 		const translation = this.rigidBody.translation();
 		const fixedRigidBodyDesc = this.RAPIER.RigidBodyDesc.fixed()
@@ -251,9 +307,7 @@ export class FurnitureSystem extends System {
 
 		// Attach the furniture model to the new fixed rigid body
 		const colliderDesc = this.RAPIER.ColliderDesc.cuboid(
-			0.5,
-			0.5,
-			0.5,
+			dimensions.width, dimensions.height, dimensions.depth
 		).setFriction(0.5);
 		this.rapierWorld.createCollider(colliderDesc, fixedRigidBody);
 

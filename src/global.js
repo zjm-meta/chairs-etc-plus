@@ -11,7 +11,10 @@ export const globals = {
 	camera: undefined,
 	scene: undefined,
 	ratk: undefined,
+	panelAnchor: undefined,
+	targetMarker: undefined,
 	playerHead: undefined,
 	controllers: undefined,
 	snapshot: undefined,
+	snapshotCanvas: undefined,
 };

@@ -10,13 +10,20 @@ import {
 	PCFSoftShadowMap,
 	PMREMGenerator,
 	PerspectiveCamera,
+	SRGBColorSpace,
 	Scene,
 	WebGLRenderer,
-} from 'three';
+} from "three";
 
-import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
-import { globals } from './global';
-import { reversePainterSortStable } from '@pmndrs/uikit';
+import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
+import { globals } from "./global";
+import { reversePainterSortStable } from "@pmndrs/uikit";
+
+const SCREENSHOT_CAMERA_CONSTANTS = {
+	CAMERA_FOV: 70,
+	CAMERA_PHOTO_RESOLUTION_WIDTH: 1280,
+	CAMERA_PHOTO_RESOLUTION_HEIGHT: 720,
+};
 
 export const setupScene = () => {
 	const scene = new Scene();
@@ -30,7 +37,7 @@ export const setupScene = () => {
 
 	camera.position.z = 0.2;
 
-	const light = new DirectionalLight(0xffffff);
+	const light = new DirectionalLight(0xffffff, 1);
 	light.castShadow = true;
 	scene.add(light);
 
@@ -51,17 +58,40 @@ export const setupScene = () => {
 	const pmremGenerator = new PMREMGenerator(renderer);
 
 	scene.environment = pmremGenerator.fromScene(environment).texture;
-	scene.environmentIntensity = 0.2;
+	scene.environmentIntensity = 1;
 	document.body.appendChild(renderer.domElement);
 
-	window.addEventListener('resize', function () {
+	window.addEventListener("resize", function () {
 		camera.aspect = window.innerWidth / window.innerHeight;
 		camera.updateProjectionMatrix();
 
 		renderer.setSize(window.innerWidth, window.innerHeight);
 	});
 
+	const photoCamera = new PerspectiveCamera(
+		SCREENSHOT_CAMERA_CONSTANTS.CAMERA_FOV,
+		SCREENSHOT_CAMERA_CONSTANTS.CAMERA_PHOTO_RESOLUTION_WIDTH /
+		SCREENSHOT_CAMERA_CONSTANTS.CAMERA_PHOTO_RESOLUTION_HEIGHT,
+		SCREENSHOT_CAMERA_CONSTANTS.CAMERA_PHOTO_NEAR,
+		SCREENSHOT_CAMERA_CONSTANTS.CAMERA_PHOTO_FAR
+	);
+	scene.add(photoCamera);
+	photoCamera.position.set(0, 1.5, 0);
+
+	const photoRenderer = new WebGLRenderer({ antialias: true });
+	photoRenderer.setPixelRatio(
+		SCREENSHOT_CAMERA_CONSTANTS.CAMERA_PHOTO_RESOLUTION_WIDTH /
+		SCREENSHOT_CAMERA_CONSTANTS.CAMERA_PHOTO_RESOLUTION_HEIGHT
+	);
+	photoRenderer.setSize(
+		SCREENSHOT_CAMERA_CONSTANTS.CAMERA_PHOTO_RESOLUTION_WIDTH,
+		SCREENSHOT_CAMERA_CONSTANTS.CAMERA_PHOTO_RESOLUTION_HEIGHT
+	);
+	photoRenderer.outputColorSpace = SRGBColorSpace;
+
 	globals.camera = camera;
 	globals.renderer = renderer;
 	globals.scene = scene;
+	globals.photoCamera = photoCamera;
+	globals.photoRenderer = photoRenderer;
 };
