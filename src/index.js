@@ -67,19 +67,3 @@ globals.renderer.xr.addEventListener('sessionstart', () => {
 	console.log(session);
 	session.updateTargetFrameRate(72);
 });
-
-const url =
-	'https://frnaxcssgj.execute-api.us-east-1.amazonaws.com/production/list';
-
-const headers = {
-	Accept: '*/*',
-	'x-api-key': 'mjQsVgIl_jGLntF=_sTMKECUt-1d6zpX',
-};
-
-fetch(url, {
-	method: 'GET',
-	headers: headers,
-})
-	.then((response) => response.json())
-	.then((data) => console.log(data))
-	.catch((error) => console.error('Error:', error));
