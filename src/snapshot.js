@@ -145,7 +145,7 @@ export function takeScreenshot() {
 
     console.log('loaded json ' + JSON.stringify(genAiRequestJson));
     // Make the POST request
-    fetch('https://pebble-cultured-bead.glitch.me:3000/api/v1/predictions', {
+    fetch('https://pebble-cultured-bead.glitch.me/api/v1/predictions', {
         method: 'POST',
         headers: headers,
         body: JSON.stringify(genAiRequestJson),
@@ -163,7 +163,7 @@ export function takeScreenshot() {
         globals.waitingGenAIResult = data.id;
         
         const myEmitter = new EventEmitter();
-        const intervalId = startChecking('https://pebble-cultured-bead.glitch.me:3000/api/v1/predictions/' + data.id, myEmitter);
+        const intervalId = startChecking('https://pebble-cultured-bead.glitch.me/api/v1/predictions/' + data.id, myEmitter);
 
         // // Event listener for 'outputNotEmpty'
         myEmitter.on('outputNotEmpty', (output) => {
